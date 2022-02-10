@@ -20,14 +20,13 @@ def largest_product(n_elements, grid):
         for m in range(len_columns):
             H = []
             V = []
-            if m + n_elements <= len_columns:
-                for e in range(n_elements):
+            for e in range(n_elements):
+                if m + n_elements <= len_columns:
                     H.append(grid[n][m + e])
-                print("H", H)
-            if n + n_elements <= len_rows:
-                for e in range(n_elements):
+                if n + n_elements <= len_rows:
                     V.append(grid[n + e][m])
-                print("V", V)
+            print("H", H)
+            print("V", V)
 
 
 
