@@ -3,10 +3,8 @@ class Problem_12():
         self.place_number = place_number
 
     def triangleNumber(self):
-        self.t_number = 0
-        for i in range(1, self.place_number + 1):
-            self.t_number = self.t_number + i
-
+        # self.t_number = 0
+        self.t_number = sum(range(1, self.place_number + 1))
         return self.t_number
 
     def prime_factors(self):
@@ -20,8 +18,19 @@ class Problem_12():
                 self.number = self.number // factor
             else:
                 factor = factor + 1
-            # print(self.number, factor)
+
         return prime_flist
+
+    def numbers_of_dividers(self):
+        p_factors = self.prime_factors()
+        primes = list(set(p_factors))
+        ns = []
+        for prime in primes:  # without repeated elements
+            ns.append(p_factors.count(prime))
+        nod = 1
+        for i in ns:
+            nod = nod * (1+i)
+        return nod
 
     def dividers(self):
         p_factors = self.prime_factors()
@@ -36,7 +45,7 @@ class Problem_12():
                 m.append((p ** n))
                 # print(m)
             x.append(m)
-        print(x)
+        # print(x)
         result = []
         for e, i in enumerate(x[:-1]):
             for j in i:
@@ -46,10 +55,21 @@ class Problem_12():
         return sorted(result)
 
 
-# place = 12375
+def main():
+    place_num = 1
+    num_div = 0
+    while True:
+        sol = Problem_12(place_num)
+        num_div = len(sol.dividers())
+        if num_div < 150:
+            place_num = place_num + 1
+        else:
+            tn = sol.t_number
+            break
+    return num_div, place_num, tn
 
-
-obj1 = Problem_12(7)
-print(obj1.triangleNumber())
-print(obj1.prime_factors())
-print(obj1.dividers())
+print(main())
+# obj1 = Problem_12(7)
+# print(obj1.triangleNumber())
+# print(obj1.prime_factors())
+# print(obj1.numbers_of_dividers())
