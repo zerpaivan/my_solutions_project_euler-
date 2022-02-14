@@ -1,19 +1,17 @@
 class Problem_12():
-    def __init__(self, place_number):
-        self.place_number = place_number
 
-    def triangleNumber(self):
-        # self.t_number = 0
+    def triangleNumber(self, place_number):
+        self.place_number = place_number
         self.t_number = sum(range(1, self.place_number + 1))
         return self.t_number
 
-    def prime_factors(self):
+    def prime_factors(self, number):
         prime_flist = []
         factor = 2
-        self.number = self.triangleNumber()
+        self.number = number
+
         while self.number >= factor:
             if self.number % factor == 0:
-                # print(self.number, factor)
                 prime_flist.append(factor)
                 self.number = self.number // factor
             else:
@@ -21,55 +19,54 @@ class Problem_12():
 
         return prime_flist
 
-    def numbers_of_dividers(self):
-        p_factors = self.prime_factors()
-        primes = list(set(p_factors))
-        ns = []
-        for prime in primes:  # without repeated elements
-            ns.append(p_factors.count(prime))
-        nod = 1
-        for i in ns:
-            nod = nod * (1+i)
-        return nod
+    # def numbers_of_dividers(self):
+    #     p_factors = self.prime_factors()
+    #     primes_base = list(set(p_factors))
+    #     ns = []
+    #     for prime in primes_base:  # without repeated elements
+    #         ns.append(p_factors.count(prime))
+    #     nod = 1
+    #     for i in ns:
+    #         nod = nod * (1+i)
+    #     return nod
 
-    def dividers(self):
-        p_factors = self.prime_factors()
-        primes = list(set(p_factors))
+    def dividers(self, number):
+        p_factors = self.prime_factors(number)
+        primes_base = list(set(p_factors))
         ns = []
-        x = []
-        for prime in primes:  # without repeated elements
+        monomials = []
+        for prime in primes_base:  # without repeated elements
             ns.append(p_factors.count(prime))
-        for e, p in enumerate(primes):
+
+        for i in range(len(primes_base)):
             m = []
-            for n in range(ns[e] + 1):
-                m.append((p ** n))
-                # print(m)
-            x.append(m)
-        # print(x)
-        result = []
-        for e, i in enumerate(x[:-1]):
-            for j in i:
-                for k in x[e + 1:]:
-                    for l in k:
-                        result.append(j * l)
-        return sorted(result)
+            for n in range(ns[i] + 1):
+                m.append((primes_base[i] ** n))
+            monomials.append(m)
+
+        if monomials == []:
+            monomials = [[]]
+# --------------------------------------------------------------------------
+        temp_list = []
+        list_i = monomials[0]
+        for e, list_j in enumerate(monomials[1:]):
+            for i in list_i:
+                for j in list_j:
+                    temp_list.append(i * j)
+            list_i = temp_list[:]
+            temp_list = []
+        return sorted(list_i)
 
 
 def main():
-    place_num = 1
+    place_num = 0
     num_div = 0
-    while True:
-        sol = Problem_12(place_num)
-        num_div = len(sol.dividers())
-        if num_div < 150:
-            place_num = place_num + 1
-        else:
-            tn = sol.t_number
-            break
-    return num_div, place_num, tn
+    sol = Problem_12()
+    while num_div < 500:
+        tn = sol.triangleNumber(place_num)
+        num_div = len(sol.dividers(tn))
+        place_num = place_num + 1
+    return num_div, place_num - 1, tn
+
 
 print(main())
-# obj1 = Problem_12(7)
-# print(obj1.triangleNumber())
-# print(obj1.prime_factors())
-# print(obj1.numbers_of_dividers())
